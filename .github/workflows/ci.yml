@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build (warnings on)
+        run: make build/cafe
+
+      - name: Stress test (100 fast runs)
+        run: make stress RUNS=100
+
+      - name: Sanitizers (ThreadSanitizer, AddressSanitizer, UBSan)
+        run: make sanitize
